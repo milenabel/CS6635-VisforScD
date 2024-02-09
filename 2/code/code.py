@@ -67,30 +67,36 @@ for i in x:
         draw_dot((i, j), color)
 
 # Save the plot to a file
-output_file4a = "2/figs/plot_4a.png"
-plt.savefig(output_file4a)
-output_file4a
+# output_file4a = "2/figs/plot_4a.png"
+# plt.savefig(output_file4a)
+# output_file4a
 
 # Marching Squares Lookup Table
 # Each number represents a configuration of the 4 corners of a cell
 # (top-left, top-right, bottom-right, bottom-left) in binary. 1 means above the isovalue, 0 means below.
-# lookup_table = {
-#     0: [], 1: [(0.5, 0), (0, 0.5)], 2: [(0, 0.5), (0.5, 1)], 3: [(0.5, 0), (0.5, 1)],
-#     4: [(0.5, 1), (1, 0.5)], 5: [(0.5, 0), (1, 0.5), (0, 0.5), (0.5, 1)], 6: [(0, 0.5), (1, 0.5)], 7: [(0.5, 0), (1, 0.5)],
-#     8: [(1, 0.5), (0.5, 0)], 9: [(1, 0.5), (0, 0.5)], 10: [(1, 0.5), (0.5, 0), (0.5, 1), (1, 0.5)], 11: [(0, 0.5), (0.5, 0)],
-#     12: [(0.5, 1), (0.5, 0)], 13: [(0, 0.5), (0.5, 1)], 14: [(0.5, 1), (1, 0.5)], 15: []
-# }
-
+lookup_table = {
+    0: [], 1: [(0.5, 0, 0, 0.5)], 2: [(0, 0.5, 0.5, 1)], 3: [(0.5, 0, 0.5, 1)],
+    4: [(0.5, 1, 1, 0.5)], 5: [(0.5, 0, 1, 0.5), (0, 0.5, 0.5, 1)], 6: [(0, 0.5, 1, 0.5)], 7: [(0.5, 0, 1, 0.5)],
+    8: [(1, 0.5, 0.5, 0)], 9: [(1, 0.5, 0, 0.5)], 10: [(1, 0.5, 0.5, 0), (0.5, 1, 0, 0.5)], 11: [(0, 0.5, 0.5, 0)],
+    12: [(0.5, 1, 0.5, 0)], 13: [(0, 0.5, 0.5, 1)], 14: [(0.5, 1, 1, 0.5)], 15: []
+}
 # Draw Lines in Marching Squares - Midpoint
 def march_sq_midpoint(data, i, j, isovalue):
-    # TODO Part 2
-    return
+    # return
+    index = 0
+    if data[i, j] > isovalue:
+        index |= 1
+    if data[i, j+1] > isovalue:
+        index |= 2
+    if data[i+1, j+1] > isovalue:
+        index |= 4
+    if data[i+1, j] > isovalue:
+        index |= 8
 
-
-# # Save the plot to a file
-# output_file4b = "2/figs/plot_4b.png"
-# plt.savefig(output_file4b)
-# output_file4b
+    for line in lookup_table[index]:
+        point0 = (line[0] + i, line[1] + j)
+        point1 = (line[2] + i, line[3] + j)
+        draw_line(point0, point1)
 
 # Draw Lines in Marching Squares - Linear Interpolation
 def march_sq_lin_interp(data, i, j, isovalue):
@@ -112,3 +118,8 @@ for i in x[0:-1]:
 
 
 plt.show()
+
+# Save the plot to a file
+output_file4b = "2/figs/plot_4b.png"
+plt.savefig(output_file4b)
+output_file4b
