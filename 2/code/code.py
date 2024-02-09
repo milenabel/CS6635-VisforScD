@@ -29,7 +29,7 @@ def draw_initial_plot(data, x, y):
 
 
 # Load data and make range arrays for looping
-data = np.load("/data/scalars_2D.npy") # access scalar values by data[i,j]
+data = np.load("2/data/scalars_2D.npy") # access scalar values by data[i,j]
 x = np.arange(0,data.shape[0])
 y = np.arange(0,data.shape[1])
 
@@ -60,6 +60,12 @@ isovalue = 50
 linear_interpolation = False # else, midpoint method
 
 # Add colored points to identify if cells are below or above the isovalue threshold
+# for i in x:
+#     for j in y:
+#         color = 'red' if data[i, j] > isovalue else 'black'
+#         draw_dot(ax, (i, j), color)
+
+# plt.show()
 for i in x:
     for j in y:
         # TODO Part 1
