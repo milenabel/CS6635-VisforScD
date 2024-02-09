@@ -60,16 +60,16 @@ isovalue = 50
 linear_interpolation = False # else, midpoint method
 
 # Add colored points to identify if cells are below or above the isovalue threshold
-# for i in x:
-#     for j in y:
-#         color = 'red' if data[i, j] > isovalue else 'black'
-#         draw_dot(ax, (i, j), color)
-
-# plt.show()
 for i in x:
     for j in y:
-        # TODO Part 1
-        continue
+        cell_value = data[i, j]
+        color = "red" if cell_value > isovalue else "black"
+        draw_dot((i, j), color)
+
+# Save the plot to a file
+output_file4a = "2/figs/plot_4a.png"
+plt.savefig(output_file4a)
+output_file4a
 
 
 # Draw Lines in Marching Squares - Midpoint
@@ -77,10 +77,20 @@ def march_sq_midpoint(data, i, j, isovalue):
     # TODO Part 2
     return
 
+# Save the plot to a file
+output_file4b = "2/figs/plot_4b.png"
+plt.savefig(output_file4b)
+output_file4b
+
 # Draw Lines in Marching Squares - Linear Interpolation
 def march_sq_lin_interp(data, i, j, isovalue):
     # TODO Part 3
     return
+
+# Save the plot to a file
+output_file4c = "2/figs/plot_4c.png"
+plt.savefig(output_file4c)
+output_file4c
 
 # Implement simple marching squares with midpoint approach
 for i in x[0:-1]:
