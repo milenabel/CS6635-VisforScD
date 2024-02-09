@@ -71,26 +71,36 @@ output_file4a = "2/figs/plot_4a.png"
 plt.savefig(output_file4a)
 output_file4a
 
+# Marching Squares Lookup Table
+# Each number represents a configuration of the 4 corners of a cell
+# (top-left, top-right, bottom-right, bottom-left) in binary. 1 means above the isovalue, 0 means below.
+# lookup_table = {
+#     0: [], 1: [(0.5, 0), (0, 0.5)], 2: [(0, 0.5), (0.5, 1)], 3: [(0.5, 0), (0.5, 1)],
+#     4: [(0.5, 1), (1, 0.5)], 5: [(0.5, 0), (1, 0.5), (0, 0.5), (0.5, 1)], 6: [(0, 0.5), (1, 0.5)], 7: [(0.5, 0), (1, 0.5)],
+#     8: [(1, 0.5), (0.5, 0)], 9: [(1, 0.5), (0, 0.5)], 10: [(1, 0.5), (0.5, 0), (0.5, 1), (1, 0.5)], 11: [(0, 0.5), (0.5, 0)],
+#     12: [(0.5, 1), (0.5, 0)], 13: [(0, 0.5), (0.5, 1)], 14: [(0.5, 1), (1, 0.5)], 15: []
+# }
 
 # Draw Lines in Marching Squares - Midpoint
 def march_sq_midpoint(data, i, j, isovalue):
     # TODO Part 2
     return
 
-# Save the plot to a file
-output_file4b = "2/figs/plot_4b.png"
-plt.savefig(output_file4b)
-output_file4b
+
+# # Save the plot to a file
+# output_file4b = "2/figs/plot_4b.png"
+# plt.savefig(output_file4b)
+# output_file4b
 
 # Draw Lines in Marching Squares - Linear Interpolation
 def march_sq_lin_interp(data, i, j, isovalue):
     # TODO Part 3
     return
 
-# Save the plot to a file
-output_file4c = "2/figs/plot_4c.png"
-plt.savefig(output_file4c)
-output_file4c
+# # Save the plot to a file
+# output_file4c = "2/figs/plot_4c.png"
+# plt.savefig(output_file4c)
+# output_file4c
 
 # Implement simple marching squares with midpoint approach
 for i in x[0:-1]:
