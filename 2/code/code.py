@@ -74,29 +74,45 @@ for i in x:
 # Marching Squares Lookup Table
 # Each number represents a configuration of the 4 corners of a cell
 # (top-left, top-right, bottom-right, bottom-left) in binary. 1 means above the isovalue, 0 means below.
-lookup_table = {
-    0: [], 1: [(0.5, 0, 0, 0.5)], 2: [(0, 0.5, 0.5, 1)], 3: [(0.5, 0, 0.5, 1)],
-    4: [(0.5, 1, 1, 0.5)], 5: [(0.5, 0, 1, 0.5), (0, 0.5, 0.5, 1)], 6: [(0, 0.5, 1, 0.5)], 7: [(0.5, 0, 1, 0.5)],
-    8: [(1, 0.5, 0.5, 0)], 9: [(1, 0.5, 0, 0.5)], 10: [(1, 0.5, 0.5, 0), (0.5, 1, 0, 0.5)], 11: [(0, 0.5, 0.5, 0)],
-    12: [(0.5, 1, 0.5, 0)], 13: [(0, 0.5, 0.5, 1)], 14: [(0.5, 1, 1, 0.5)], 15: []
-}
+# lookup_table = {
+#     0: [], 1: [(0.5, 0, 0, 0.5)], 2: [(0, 0.5, 0.5, 1)], 3: [(0.5, 0, 0.5, 1)],
+#     4: [(0.5, 1, 1, 0.5)], 5: [(0.5, 0, 1, 0.5), (0, 0.5, 0.5, 1)], 6: [(0, 0.5, 1, 0.5)], 7: [(0.5, 0, 1, 0.5)],
+#     8: [(1, 0.5, 0.5, 0)], 9: [(1, 0.5, 0, 0.5)], 10: [(1, 0.5, 0.5, 0), (0.5, 1, 0, 0.5)], 11: [(0, 0.5, 0.5, 0)],
+#     12: [(0.5, 1, 0.5, 0)], 13: [(0, 0.5, 0.5, 1)], 14: [(0.5, 1, 1, 0.5)], 15: []
+# }
 # Draw Lines in Marching Squares - Midpoint
 def march_sq_midpoint(data, i, j, isovalue):
-    # return
-    index = 0
+     # Determine cell configuration
+    config = 0
     if data[i, j] > isovalue:
-        index |= 1
-    if data[i, j+1] > isovalue:
-        index |= 2
-    if data[i+1, j+1] > isovalue:
-        index |= 4
-    if data[i+1, j] > isovalue:
-        index |= 8
+        config |= 1
+    if data[i, j + 1] > isovalue:
+        config |= 2
+    if data[i + 1, j + 1] > isovalue:
+        config |= 4
+    if data[i + 1, j] > isovalue:
+        config |= 8
 
-    for line in lookup_table[index]:
-        point0 = (line[0] + i, line[1] + j)
-        point1 = (line[2] + i, line[3] + j)
-        draw_line(point0, point1)
+    # Draw lines based on the lookup table
+    if config == 1 or config == 14:
+        draw_line((i + 0.5, j), (i, j + 0.5))
+    elif config == 2 or config == 13:
+        draw_line((i + 0.5, j + 1), (i, j + 0.5))
+    elif config == 3 or config == 12:
+        draw_line((i + 0.5, j), (i + 0.5, j + 1))
+    elif config == 4 or config == 11:
+        draw_line((i + 1, j + 0.5), (i + 0.5, j + 1))
+    elif config == 6 or config == 9:
+        draw_line((i + 1, j + 0.5), (i + 0.5, j))
+        draw_line((i + 0.5, j + 1), (i, j + 0.5))
+    elif config == 7 or config == 8:
+        draw_line((i + 1, j + 0.5), (i + 0.5, j))
+    elif config == 5:
+        draw_line((i + 0.5, j), (i, j + 0.5))
+        draw_line((i + 1, j + 0.5), (i + 0.5, j + 1))
+    elif config == 10:
+        draw_line((i, j + 0.5), (i + 0.5, j + 1))
+        draw_line((i + 1, j + 0.5), (i + 0.5, j))
 
 # Draw Lines in Marching Squares - Linear Interpolation
 def march_sq_lin_interp(data, i, j, isovalue):
