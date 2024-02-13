@@ -55,9 +55,8 @@ def draw_line(point0, point1):
 #-----------------------
 # ASSIGNMENT STARTS HERE
 #-----------------------
-
 isovalue = 50
-linear_interpolation = False # else, midpoint method
+linear_interpolation = True # else, midpoint method
 
 # Add colored points to identify if cells are below or above the isovalue threshold
 for i in x:
@@ -70,59 +69,80 @@ for i in x:
 # output_file4a = "2/figs/plot_4a.png"
 # plt.savefig(output_file4a)
 # output_file4a
+        
 
 # Marching Squares Lookup Table
 # Each number represents a configuration of the 4 corners of a cell
-# (top-left, top-right, bottom-right, bottom-left) in binary. 1 means above the isovalue, 0 means below.
-# lookup_table = {
-#     0: [], 1: [(0.5, 0, 0, 0.5)], 2: [(0, 0.5, 0.5, 1)], 3: [(0.5, 0, 0.5, 1)],
-#     4: [(0.5, 1, 1, 0.5)], 5: [(0.5, 0, 1, 0.5), (0, 0.5, 0.5, 1)], 6: [(0, 0.5, 1, 0.5)], 7: [(0.5, 0, 1, 0.5)],
-#     8: [(1, 0.5, 0.5, 0)], 9: [(1, 0.5, 0, 0.5)], 10: [(1, 0.5, 0.5, 0), (0.5, 1, 0, 0.5)], 11: [(0, 0.5, 0.5, 0)],
-#     12: [(0.5, 1, 0.5, 0)], 13: [(0, 0.5, 0.5, 1)], 14: [(0.5, 1, 1, 0.5)], 15: []
-# }
+# (top-left, top-right, bottom-right, bottom-left) in binary. 1 means above the isovalue, 0 means below.        
+lookup_table = {
+    0: [], 1: [(0.5, 0, 0, 0.5)], 2: [(0, 0.5, 0.5, 1)], 3: [(0.5, 0, 0.5, 1)],
+    4: [(0.5, 1, 1, 0.5)], 5: [(0.5, 0, 1, 0.5), (0, 0.5, 0.5, 1)], 6: [(0, 0.5, 1, 0.5)], 7: [(0.5, 0, 1, 0.5)],
+    8: [(1, 0.5, 0.5, 0)], 9: [(1, 0.5, 0, 0.5)], 10: [(1, 0.5, 0.5, 0), (0.5, 1, 0, 0.5)], 11: [(0.5, 1, 1, 0.5)],
+    12: [(0.5, 1, 0.5, 0)], 13: [(0, 0.5, 0.5, 1)], 14: [(0, 0.5, 0.5, 0)], 15: []
+}
+
+
 # Draw Lines in Marching Squares - Midpoint
 def march_sq_midpoint(data, i, j, isovalue):
-     # Determine cell configuration
-    config = 0
+    # return
+    index = 0
     if data[i, j] > isovalue:
-        config |= 1
-    if data[i, j + 1] > isovalue:
-        config |= 2
-    if data[i + 1, j + 1] > isovalue:
-        config |= 4
-    if data[i + 1, j] > isovalue:
-        config |= 8
+        index |= 1
+    if data[i, j+1] > isovalue:
+        index |= 2
+    if data[i+1, j+1] > isovalue:
+        index |= 4
+    if data[i+1, j] > isovalue:
+        index |= 8
+    for line in lookup_table[index]:
+        point0 = (line[0] + i, line[1] + j)
+        point1 = (line[2] + i, line[3] + j)
+        draw_line(point0, point1)
 
-    # Draw lines based on the lookup table
-    if config == 1 or config == 14:
-        draw_line((i + 0.5, j), (i, j + 0.5))
-    elif config == 2 or config == 13:
-        draw_line((i + 0.5, j + 1), (i, j + 0.5))
-    elif config == 3 or config == 12:
-        draw_line((i + 0.5, j), (i + 0.5, j + 1))
-    elif config == 4 or config == 11:
-        draw_line((i + 1, j + 0.5), (i + 0.5, j + 1))
-    elif config == 6 or config == 9:
-        draw_line((i + 1, j + 0.5), (i + 0.5, j))
-        draw_line((i + 0.5, j + 1), (i, j + 0.5))
-    elif config == 7 or config == 8:
-        draw_line((i + 1, j + 0.5), (i + 0.5, j))
-    elif config == 5:
-        draw_line((i + 0.5, j), (i, j + 0.5))
-        draw_line((i + 1, j + 0.5), (i + 0.5, j + 1))
-    elif config == 10:
-        draw_line((i, j + 0.5), (i + 0.5, j + 1))
-        draw_line((i + 1, j + 0.5), (i + 0.5, j))
+# Helper function to interpolate between two points
+# def interpolate(p1, p2, v1, v2, isovalue):
+#     if v1 == v2:
+#         return p1
+#     return (p1[0] + (p2[0] - p1[0]) * (isovalue - v1) / (v2 - v1),
+#             p1[1] + (p2[1] - p1[1]) * (isovalue - v1) / (v2 - v1))
 
 # Draw Lines in Marching Squares - Linear Interpolation
 def march_sq_lin_interp(data, i, j, isovalue):
-    # TODO Part 3
-    return
+    # Function to interpolate the point along a grid line
+    def interp_point(p1, p2, v1, v2):
+        if v2 - v1 == 0:
+            return p1  # Avoid division by zero
+        t = (isovalue - v1) / (v2 - v1)
+        return p1 + t * (p2 - p1)
 
-# # Save the plot to a file
-# output_file4c = "2/figs/plot_4c.png"
-# plt.savefig(output_file4c)
-# output_file4c
+    # Determine the index of the cell
+    index = 0
+    if data[i, j] > isovalue:
+        index |= 1
+    if data[i, j+1] > isovalue:
+        index |= 2
+    if data[i+1, j+1] > isovalue:
+        index |= 4
+    if data[i+1, j] > isovalue:
+        index |= 8
+
+    # Get the line segments for this cell configuration
+    lines = lookup_table[index]
+
+    for line in lines:
+        # Corners of the cell
+        corners = [(i, j), (i, j+1), (i+1, j+1), (i+1, j)]
+
+        # Scalar values at the corners
+        values = [data[i, j], data[i, j+1], data[i+1, j+1], data[i+1, j]]
+
+        # Interpolate points
+        p0 = interp_point(np.array(corners[line[0]]), np.array(corners[line[1]]), 
+                          values[line[0]], values[line[1]])
+        p1 = interp_point(np.array(corners[line[2]]), np.array(corners[line[3]]), 
+                          values[line[2]], values[line[3]])
+
+        draw_line(p0, p1)
 
 # Implement simple marching squares with midpoint approach
 for i in x[0:-1]:
@@ -132,10 +152,14 @@ for i in x[0:-1]:
         else:
             march_sq_midpoint(data, i, j, isovalue)
 
+# # Save the plot to a file
+# output_file4b = "2/figs/plot_4b.png"
+# plt.savefig(output_file4b)
+# output_file4b
+            
+# Save the plot to a file
+output_file4c = "2/figs/plot_4c.png"
+plt.savefig(output_file4c)
+output_file4c
 
 plt.show()
-
-# Save the plot to a file
-output_file4b = "2/figs/plot_4b.png"
-plt.savefig(output_file4b)
-output_file4b
