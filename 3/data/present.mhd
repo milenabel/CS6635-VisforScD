@@ -1,0 +1,10 @@
+ObjectType              = Image
+BinaryData              = True
+BinaryDataByteOrderMSB  = false
+HeaderSize              = 0
+NDims                   = 3
+DimSize                 = 492 492 442
+ElementSpacing          = 1 1 1
+ElementNumberOfChannels = 1
+ElementType             = MET_USHORT
+ElementDataFile         = present.mhd.raw

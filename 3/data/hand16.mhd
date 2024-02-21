@@ -1,0 +1,10 @@
+ObjectType              = Image
+BinaryData              = True
+BinaryDataByteOrderMSB  = false
+HeaderSize              = 0
+NDims                   = 3
+DimSize                 = 244 124 257
+ElementSpacing          = 1 1 1
+ElementNumberOfChannels = 1
+ElementType             = MET_USHORT
+ElementDataFile         = hand16.mhd.raw
