@@ -71,10 +71,15 @@ def bilinear_interpolation(x, y, vecs):
     if x1 == x2: x2 += 1
     if y1 == y2: y2 += 1
 
-    Q11 = vecs[y1, x1] if y1 < 20 and x1 < 20 else np.array([0, 0])
-    Q12 = vecs[y2, x1] if y2 < 20 and x1 < 20 else np.array([0, 0])
-    Q21 = vecs[y1, x2] if y1 < 20 and x2 < 20 else np.array([0, 0])
-    Q22 = vecs[y2, x2] if y2 < 20 and x2 < 20 else np.array([0, 0])
+    # Q11 = vecs[y1, x1] if y1 < 20 and x1 < 20 else np.array([0, 0])
+    # Q12 = vecs[y2, x1] if y2 < 20 and x1 < 20 else np.array([0, 0])
+    # Q21 = vecs[y1, x2] if y1 < 20 and x2 < 20 else np.array([0, 0])
+    # Q22 = vecs[y2, x2] if y2 < 20 and x2 < 20 else np.array([0, 0])
+
+    Q11 = vecs[x1, y1] if y1 < 20 and x1 < 20 else np.array([0, 0])
+    Q12 = vecs[x1, y2] if y2 < 20 and x1 < 20 else np.array([0, 0])
+    Q21 = vecs[x2, y1] if y1 < 20 and x2 < 20 else np.array([0, 0])
+    Q22 = vecs[x2, y2] if y2 < 20 and x2 < 20 else np.array([0, 0])
 
     # Bilinear interpolation formula
     R1 = (x2 - x) / (x2 - x1) * Q11 + (x - x1) / (x2 - x1) * Q21
@@ -140,6 +145,7 @@ def plot_streamlines(seed_points, vecs, time_step, steps, title, file_name):
     # Save the plot
     plot_path = f"4/figs/{file_name}.png"
     plt.savefig(plot_path)
+    plt.show()
     return plot_path
 
 # Parameters for different streamlines
@@ -151,7 +157,6 @@ streamline_params = [
 
 # Generate and save plots for each parameter set
 plot_paths = [plot_streamlines(seed_points, vecs, ts, st, title, file_name) for ts, st, title, file_name in streamline_params]
-plt.show()
 plot_paths
 
 # Extra Credit
