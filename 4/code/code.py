@@ -154,9 +154,7 @@ plot_paths = [plot_streamlines(seed_points, vecs, ts, st, title, file_name) for 
 plt.show()
 plot_paths
 
-
-
-#extra credit
+# Extra Credit
 
 # Parameters for different streamlines
 streamline_params_2 = [
