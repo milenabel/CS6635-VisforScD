@@ -155,5 +155,101 @@ plt.show()
 plot_paths
 
 
+
+#extra credit
+
+# Parameters for different streamlines
+streamline_params_2 = [
+    (0.3, 8, 'Streamlines with Time Step 0.3, Steps 8', 'part4_streamlines_step0.3_steps8'),
+    (0.15, 16, 'Streamlines with Time Step 0.15, Steps 16', 'part4_streamlines_step0.15_steps16'),
+    (0.075, 32, 'Streamlines with Time Step 0.075, Steps 32', 'part4_streamlines_step0.075_steps32'),
+    (0.0375, 64, 'Streamlines with Time Step 0.0375, Steps 64', 'part4_streamlines_step0.0375_steps64')
+]
+
+def runge_kutta_integration(x, y, vecs, time_step):
+    """
+    Implement the 4th order Runge-Kutta (RK4) method for integrating the vector field.
+    Args:
+    - x, y: Initial position
+    - vecs: Vector field data
+    - time_step: Time step value
+    
+    Returns:
+    - New x, y positions after the time step
+    """
+    # Helper to safely get vector considering boundaries
+    def get_vector(x, y, vecs):
+        if 0 <= x < 20 and 0 <= y < 20:
+            ix, iy = int(x), int(y)
+            return bilinear_interpolation(x, y, vecs)
+        return np.array([0, 0])
+
+    # k1
+    v1 = get_vector(x, y, vecs)
+    k1x, k1y = v1
+
+    # k2
+    v2 = get_vector(x + k1x * time_step / 2, y + k1y * time_step / 2, vecs)
+    k2x, k2y = v2
+
+    # k3
+    v3 = get_vector(x + k2x * time_step / 2, y + k2y * time_step / 2, vecs)
+    k3x, k3y = v3
+
+    # k4
+    v4 = get_vector(x + k3x * time_step, y + k3y * time_step, vecs)
+    k4x, k4y = v4
+
+    # Combine
+    x_new = x + (k1x + 2*k2x + 2*k3x + k4x) * time_step / 6
+    y_new = y + (k1y + 2*k2y + 2*k3y + k4y) * time_step / 6
+
+    return x_new, y_new
+
+def trace_streamline_rk4(x, y, vecs, time_step, steps):
+    """
+    Trace a streamline from a seed point using the Runge-Kutta method.
+    Args:
+    - x, y: Initial position
+    - vecs: Vector field data
+    - time_step: Time step value
+    - steps: Number of steps to perform
+
+    Returns:
+    - Arrays of x and y coordinates of the streamline
+    """
+    xs, ys = [x], [y]
+    for _ in range(steps):
+        x, y = runge_kutta_integration(x, y, vecs, time_step)
+        # Boundary conditions
+        if x < 0 or x >= 20 or y < 0 or y >= 20:
+            break
+        xs.append(x)
+        ys.append(y)
+    return np.array(xs), np.array(ys)
+
+# Generate and save plots for each parameter set using RK4
+rk4_plot_paths = []
+for ts, st, title, file_name in streamline_params_2:
+    plt.figure(figsize=(10, 10))
+    plt.plot(xx, yy, marker='.', color='b', linestyle='none')
+    plt.quiver(xx, yy, vecs_flat[:, 0], vecs_flat[:, 1], width=0.001)
+    for seed in seed_points:
+        xs, ys = trace_streamline_rk4(seed[0], seed[1], vecs, ts, st)
+        plt.plot(xs, ys, marker='o', linestyle='-', markersize=2)
+
+    plt.xlim([0, 19])
+    plt.ylim([0, 19])
+    plt.title(title + ' (RK4)')
+
+    # Save the plot
+    rk4_plot_path = f"4/figs/{file_name}_rk4.png"
+    plt.savefig(rk4_plot_path)
+    rk4_plot_paths.append(rk4_plot_path)
+    plt.show()
+
+rk4_plot_paths
+
+
 # 
 
