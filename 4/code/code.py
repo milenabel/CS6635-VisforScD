@@ -123,3 +123,37 @@ plt.ylim([0, 19])
 plt.title('Streamlines with Time Step 0.3, Steps 8')
 plt.savefig("4/figs/part4_2.png")
 plt.show()
+
+# Define function to plot streamlines with varying time steps and steps
+def plot_streamlines(seed_points, vecs, time_step, steps, title, file_name):
+    plt.figure(figsize=(10, 10))
+    plt.plot(xx, yy, marker='.', color='b', linestyle='none')
+    plt.quiver(xx, yy, vecs_flat[:, 0], vecs_flat[:, 1], width=0.001)
+    for seed in seed_points:
+        xs, ys = trace_streamline(seed[0], seed[1], vecs, time_step, steps)
+        plt.plot(xs, ys, marker='o', linestyle='-', markersize=2)
+
+    plt.xlim([0, 19])
+    plt.ylim([0, 19])
+    plt.title(title)
+
+    # Save the plot
+    plot_path = f"4/figs/{file_name}.png"
+    plt.savefig(plot_path)
+    return plot_path
+
+# Parameters for different streamlines
+streamline_params = [
+    (0.15, 16, 'Streamlines with Time Step 0.15, Steps 16', 'part4_streamlines_step0.15_steps16'),
+    (0.075, 32, 'Streamlines with Time Step 0.075, Steps 32', 'part4_streamlines_step0.075_steps32'),
+    (0.0375, 64, 'Streamlines with Time Step 0.0375, Steps 64', 'part4_streamlines_step0.0375_steps64')
+]
+
+# Generate and save plots for each parameter set
+plot_paths = [plot_streamlines(seed_points, vecs, ts, st, title, file_name) for ts, st, title, file_name in streamline_params]
+plt.show()
+plot_paths
+
+
+# 
+
